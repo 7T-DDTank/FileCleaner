@@ -11,7 +11,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileCleaner", "src\FileCleaner\FileCleaner.csproj", "{5AA221D5-15BF-40BB-B2C1-63DD8FF6BAD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileCleaner.Core", "src\FileCleaner.Core\FileCleaner.Core.csproj", "{13D20BB4-76E1-4C19-AF9D-5B8B54F5FAD9}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5AA221D5-15BF-40BB-B2C1-63DD8FF6BAD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AA221D5-15BF-40BB-B2C1-63DD8FF6BAD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AA221D5-15BF-40BB-B2C1-63DD8FF6BAD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AA221D5-15BF-40BB-B2C1-63DD8FF6BAD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13D20BB4-76E1-4C19-AF9D-5B8B54F5FAD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13D20BB4-76E1-4C19-AF9D-5B8B54F5FAD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13D20BB4-76E1-4C19-AF9D-5B8B54F5FAD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13D20BB4-76E1-4C19-AF9D-5B8B54F5FAD9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
