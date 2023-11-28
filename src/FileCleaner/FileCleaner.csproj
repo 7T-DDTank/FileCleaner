@@ -7,7 +7,6 @@
     <Nullable>enable</Nullable>
     <AssemblyName>KempDec.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>KempDec.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
