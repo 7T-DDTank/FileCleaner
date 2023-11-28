@@ -9,4 +9,9 @@ internal record CleaningTask
     /// Obtém ou inicializa o caminho da tarefa de limpeza.
     /// </summary>
     public string? Path { get; init; }
+
+    /// <summary>
+    /// Obtém ou inicializa a quantidade de dias atrás para um arquivo ser excluído.
+    /// </summary>
+    public int? FilesDaysAgo { get; init; }
 }

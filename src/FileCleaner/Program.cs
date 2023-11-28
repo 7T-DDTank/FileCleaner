@@ -38,7 +38,7 @@ foreach (CleaningTask cleaningTask in appSettings.CleaningTasks)
         continue;
     }
 
-    CleanFiles(cleaningTask.Path);
+    CleanFiles(cleaningTask.Path, cleaningTask.FilesDaysAgo);
 }
 
 while (true)
@@ -46,12 +46,13 @@ while (true)
     ReadLine();
 }
 
-static void CleanFiles(string path)
+static void CleanFiles(string path, int? daysAgo)
 {
     try
     {
         var cleaner = new FileCleaner(path);
 
+        WriteLine("==========================================================");
         WriteLine($"Caminho: {cleaner.Path}");
         WriteLine("Iniciando a limpeza...");
 
@@ -61,7 +62,11 @@ static void CleanFiles(string path)
         var progress = new Progress<(int Count, int TotalCount)>(WriteProgress);
 
         timer.Start();
-        int count = cleaner.DeleteAllFiles(progress);
+
+        int count = daysAgo is null
+            ? cleaner.DeleteAllFiles(progress)
+            : cleaner.DeleteAllOldFiles(daysAgo.Value, progress);
+
         timer.Stop();
 
         ResetColor();
