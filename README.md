@@ -2,6 +2,8 @@
 
 O FileCleaner é uma solução simples para a limpeza de arquivos periodicamente.
 
+> **Obs.: O projeto está em desenvolvimento e até o momento não contém todas as funcionalidades.**
+
 # Índice
 
 - [Autores](#autores)
