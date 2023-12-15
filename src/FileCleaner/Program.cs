@@ -58,16 +58,14 @@ static void CleanFiles(string path, int? daysAgo)
 
         ForegroundColor = ConsoleColor.Green;
 
-        var timer = new Stopwatch();
         var progress = new Progress<(int Count, int TotalCount)>(WriteProgress);
-
-        timer.Start();
+        var stopwatch = Stopwatch.StartNew();
 
         int count = daysAgo is null
             ? cleaner.DeleteAllFiles(progress)
             : cleaner.DeleteAllOldFiles(daysAgo.Value, progress);
 
-        timer.Stop();
+        stopwatch.Stop();
 
         ResetColor();
 
@@ -77,7 +75,7 @@ static void CleanFiles(string path, int? daysAgo)
             WriteLine();
         }
 
-        WriteLine($"Limpeza concluída. {count} arquivos foram excluídos em {timer.Elapsed.TotalSeconds:N2}s!");
+        WriteLine($"Limpeza concluída. {count} arquivos foram excluídos em {stopwatch.Elapsed.TotalSeconds:N2}s!");
     }
     catch (Exception ex)
     {
