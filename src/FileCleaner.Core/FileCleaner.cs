@@ -22,6 +22,11 @@ public class FileCleaner
             MovePath = null;
         }
 
+        if (MovePath is not null && !Directory.Exists(MovePath))
+        {
+            Directory.CreateDirectory(MovePath);
+        }
+
         if (!Directory.Exists(path))
         {
             throw new ArgumentException($"O caminho '{path}' não existe.", nameof(path));

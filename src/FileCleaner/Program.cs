@@ -118,6 +118,7 @@ static void CleanFiles(string path, int? daysAgo, string movePath, int? moveDays
     catch (Exception ex)
     {
         WriteErrorLine(ex.Message);
+        WriteErrorLine(ex.StackTrace ?? "");
     }
 }
 
