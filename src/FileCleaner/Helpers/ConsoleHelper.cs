@@ -20,5 +20,10 @@ public static class ConsoleHelper
     /// Escreve uma mensagem, substituindo a mensagem atual.
     /// </summary>
     /// <param name="message">A mensagem a ser escrita.</param>
-    public static void WriteReplace(string message) => Console.Write($"\r{message}");
+    public static void WriteLineReplace(string message)
+    {
+        Console.CursorTop--;
+        Console.CursorLeft = 0;
+        Console.WriteLine(message);
+    }
 }

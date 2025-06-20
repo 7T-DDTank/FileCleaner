@@ -29,28 +29,47 @@ if (appSettings.CleaningTasks is not { Count: > 0 })
     return;
 }
 
-foreach (CleaningTask cleaningTask in appSettings.CleaningTasks)
+if (appSettings!.CleaningTasks!.Any(x => x.MovePath is not null && (x.MoveFilesDaysAgo ?? 0) >= x.FilesDaysAgo))
 {
-    if (string.IsNullOrEmpty(cleaningTask.Path))
-    {
-        WriteErrorLine("O caminho da tarefa de limpeza está vazio.");
+    WriteErrorLine($"Há tarefas de limpeza com o prazo para mover arquivos maior que o de deletar arquivos.");
 
-        continue;
+    ReadLine();
+
+    return;
+}
+
+do
+{
+    foreach (CleaningTask cleaningTask in appSettings.CleaningTasks)
+    {
+        if (string.IsNullOrEmpty(cleaningTask.Path))
+        {
+            WriteErrorLine("O caminho da tarefa de limpeza está vazio.");
+
+            continue;
+        }
+
+        CleanFiles(cleaningTask.Path, cleaningTask.FilesDaysAgo, cleaningTask.MovePath, cleaningTask.MoveFilesDaysAgo);
     }
 
-    CleanFiles(cleaningTask.Path, cleaningTask.FilesDaysAgo);
-}
+    ResetColor();
 
-while (true)
-{
-    ReadLine();
-}
+    if (appSettings.LoopDelay is not null)
+    {
+        WriteLine($"Aguardando {appSettings.LoopDelay} minutos para verificar novamente...");
+        Thread.Sleep(TimeSpan.FromMinutes(appSettings.LoopDelay.Value));
+    }
 
-static void CleanFiles(string path, int? daysAgo)
+} while (appSettings.LoopDelay is not null);
+
+WriteLine("Pressione Enter para Sair");
+ReadLine();
+
+static void CleanFiles(string path, int? daysAgo, string movePath, int? moveDaysAgo)
 {
     try
     {
-        var cleaner = new FileCleaner(path);
+        var cleaner = new FileCleaner(path, movePath);
 
         WriteLine("==========================================================");
         WriteLine($"Caminho: {cleaner.Path}");
@@ -61,9 +80,28 @@ static void CleanFiles(string path, int? daysAgo)
         var progress = new Progress<(int Count, int TotalCount)>(WriteProgress);
         var stopwatch = Stopwatch.StartNew();
 
-        int count = daysAgo is null
-            ? cleaner.DeleteAllFiles(progress)
-            : cleaner.DeleteAllOldFiles(daysAgo.Value, progress);
+        int moveCount = 0;
+        int count = 0;
+
+        if (string.IsNullOrWhiteSpace(movePath))
+        {
+            count = daysAgo is null
+                ? cleaner.DeleteAllFiles(progress)
+                : cleaner.DeleteAllOldFiles(daysAgo.Value, progress);
+        }
+        else if (moveDaysAgo is not null)
+        {
+            moveCount = cleaner.MoveAllOldFiles(moveDaysAgo.Value, progress);
+
+            count = daysAgo is null
+                ? cleaner.DeleteAllFiles(progress)
+                : cleaner.DeleteAllOldFiles(daysAgo.Value, progress);
+        }
+        else
+        {
+            WriteErrorLine("O período para mover os arquivos não está definido.");
+            return;
+        }
 
         stopwatch.Stop();
 
@@ -75,7 +113,7 @@ static void CleanFiles(string path, int? daysAgo)
             WriteLine();
         }
 
-        WriteLine($"Limpeza concluída. {count} arquivos foram excluídos em {stopwatch.Elapsed.TotalSeconds:N2}s!");
+        WriteLine($"Limpeza concluída. {count} arquivos foram excluídos e {moveCount} arquivos foram movidos em {stopwatch.Elapsed.TotalSeconds:N2}s!");
     }
     catch (Exception ex)
     {
@@ -85,5 +123,5 @@ static void CleanFiles(string path, int? daysAgo)
 
 static void WriteProgress((int Count, int TotalCount) progress)
 {
-    WriteReplace($"Por favor, aguarde. Excluindo {progress.Count}/{progress.TotalCount} arquivos.");
+    WriteLineReplace($"Por favor, aguarde. Processando {progress.Count}/{progress.TotalCount} arquivos.");
 }

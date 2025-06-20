@@ -5,6 +5,7 @@
 /// </summary>
 internal record AppSettings
 {
+    public int? LoopDelay { get; init; } = null;
     /// <summary>
     /// Obtém ou inicializa as tarefas de limpeza a serem executadas pelo aplicativo.
     /// </summary>
